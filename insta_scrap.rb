@@ -64,8 +64,8 @@ shortcode.each do |code|
   system("instatouch comments #{code} -f comments -c #{input} -t json -r all")
   puts "#{x} / #{shortcode.count}"
 
-  if File.read('likers.json')
-    jsontxt = File.read('likers.json')
+  jsontxt = File.read('likers.json')
+  if jsontxt.length.positive?
     son = JSON.parse(jsontxt)
     son.each do |likes|
       likers << { 'username' => likes['username'], 'private' => likes['is_private'], 'verified' => likes['is_verified'] }
