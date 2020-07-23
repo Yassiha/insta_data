@@ -49,6 +49,8 @@ end
 
 likers = []
 commenters = []
+system('touch likers.json')
+system('touch comments.json')
 
 puts '.'
 puts '.'
@@ -70,8 +72,8 @@ shortcode.each do |code|
     end
   end
 
-  if File.read('comments.json')
-    commentstxt = File.read('comments.json')
+  commentstxt = File.read('comments.json')
+  if commentstxt.length.positive?
     son2 = JSON.parse(commentstxt)
     son2.each do |comments|
       commenters << { 'username' => comments['owner']['username'], 'comments' => comments['text'],
