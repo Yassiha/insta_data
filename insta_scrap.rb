@@ -68,7 +68,8 @@ shortcode.each do |code|
   if jsontxt.length.positive?
     son = JSON.parse(jsontxt)
     son.each do |likes|
-      likers << { 'username' => likes['username'], 'private' => likes['is_private'], 'verified' => likes['is_verified'] }
+      likers << { 'username' => likes['username'],
+                  'private' => likes['is_private'], 'verified' => likes['is_verified'] }
     end
   end
 
@@ -82,6 +83,7 @@ shortcode.each do |code|
   end
   x += 1
 end
+
 puts '.'
 puts '.'
 puts 'OUTPUTS READING OK. PREPARING FINAL OUTPUT'
@@ -125,7 +127,7 @@ system('rm firstOutput.json')
 system('rm comments.json')
 puts '.'
 puts '.'
-puts 'FINAL OUTPUT READY'
-puts 'CODED BY YassIha'
+puts 'FINAL OUTPUT READY.'
+puts 'CODED BY YI'
 puts '.'
 puts '.'
