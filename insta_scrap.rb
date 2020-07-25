@@ -1,5 +1,6 @@
 require 'json'
 require 'csv'
+require 'pry'
 
 puts '.___                 __              .___       __          '
 puts '|   | ____   _______/  |______     __| _/____ _/  |______   '
@@ -59,7 +60,7 @@ x = 1
 shortcode.each do |code|
   puts "GETTING LIKERS OF POST NUMBER #{x}"
   system("instatouch likers #{code} -f likers -c #{input} -t json -r all")
-  sleep 1
+  sleep 0.5
   puts "GETTING COMMENTERS OF POST NUMBER #{x}"
   system("instatouch comments #{code} -f comments -c #{input} -t json -r all")
   puts "#{x} / #{shortcode.count}"
@@ -92,6 +93,7 @@ puts "#{commenters.count} commenters scrapped"
 
 # REMOVE DUPLICATE AND INCREMENT COUNT OF LIKES PER USERNAME
 likers = likers.inject(Hash.new(0)) { |total, e| total[e] += 1; total }
+commenters = commenters.uniq { |c| c['comments'] }
 
 system("touch #{user}_likers.csv")
 system("touch #{user}_commenters.csv")
