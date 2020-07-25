@@ -45,7 +45,7 @@ allposts = []
 son.each do |post|
   shortcode << post['shortcode']
   allposts << { 'description' => post['description'], 'comments' => post['comments'],
-                'likes' => post['likes'], 'date' => post['taken_at_timestamp'] }
+                'likes' => post['likes'], 'date' => post['taken_at_timestamp'], 'id' => post['shortcode'] }
 end
 
 likers = []
@@ -70,7 +70,7 @@ shortcode.each do |code|
     son = JSON.parse(jsontxt)
     son.each do |likes|
       likers << { 'username' => likes['username'],
-                  'private' => likes['is_private'], 'verified' => likes['is_verified'] }
+                  'private' => likes['is_private'], 'verified' => likes['is_verified'], 'associated_post' => code }
     end
   end
 
@@ -79,7 +79,8 @@ shortcode.each do |code|
     son2 = JSON.parse(commentstxt)
     son2.each do |comments|
       commenters << { 'username' => comments['owner']['username'], 'comments' => comments['text'],
-                      'likes_on_comment' => comments['likes'], 'responses_on_comment' => comments['comments'] }
+                      'likes_on_comment' => comments['likes'], 'responses_on_comment' => comments['comments'],
+                      'associated_post' => code }
     end
   end
   x += 1
@@ -100,24 +101,24 @@ system("touch #{user}_commenters.csv")
 system("touch #{user}_posts.csv")
 
 CSV.open("#{user}_likers.csv", 'w') do |csv|
-  csv << %w[username likes is_private is_verified]
+  csv << %w[username likes is_private is_verified associated_post]
   likers.each do |liker|
-    csv << [liker[0]['username'], liker[1], liker[0]['private'], liker[0]['verified']]
+    csv << [liker[0]['username'], liker[1], liker[0]['private'], liker[0]['verified'], liker[0]['associated_post']]
   end
 end
 
 CSV.open("#{user}_commenters.csv", 'w') do |csv|
-  csv << %w[username content likes_on_comment responses_on_comment]
+  csv << %w[username content likes_on_comment responses_on_comment associated_post]
   commenters.each do |commenter|
     csv << [commenter['username'], commenter['comments'],
-            commenter['likes_on_comment'], commenter['responses_on_comment']]
+            commenter['likes_on_comment'], commenter['responses_on_comment'], commenter['associated_post']]
   end
 end
 
 CSV.open("#{user}_posts.csv", 'w') do |csv|
-  csv << %w[description comments likes date]
+  csv << %w[description comments likes date id]
   allposts.each do |post|
-    csv << [post['description'], post['comments'], post['likes'], Time.at(post['date'])]
+    csv << [post['description'], post['comments'], post['likes'], Time.at(post['date']), post['id']]
   end
 end
 
